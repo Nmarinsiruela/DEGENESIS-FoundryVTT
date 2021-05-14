@@ -182,13 +182,23 @@ export class DegenesisActor extends Actor {
 
         for (let attribute in this.data.data.attributes)
         {
-            attributeSkillGroups[attribute] = {label: DEGENESIS.attributes[attribute], value :this.data.data.attributes[attribute].value, skills: {}}
+            attributeSkillGroups[attribute] = {label: DEGENESIS.attributes[attribute], type: DEGENESIS.attributeType[attribute],  value :this.data.data.attributes[attribute].value, skills: {}}
         }
         for (let skill in this.data.data.skills)
         {
             this.data.data.skills[skill].label = DEGENESIS.skills[skill];
             attributeSkillGroups[this.data.data.skills[skill].attribute].skills[skill] = this.data.data.skills[skill];
         }
+
+        // The current type is selected: Primal or Focus.
+        const attributeType = this.getFocusOrPrimal().label;
+
+        // Now, we set up which attribute is preferred and which one not.
+        for (let attribute in this.data.data.attributes)
+        {
+            attributeSkillGroups[attribute].isPreferred = attributeSkillGroups[attribute].type === attributeType;
+        }
+        
         return attributeSkillGroups;
     }
 
